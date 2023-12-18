@@ -5,11 +5,7 @@ import {
   logoutUser,
   registrationUser,
 } from '../controllers/user.controller';
-import {
-  authorizeRoles,
-  isAuthenticated,
-  updateAccessToken,
-} from '../middleware/auth';
+import { isAuthenticated, updateAccessToken } from '../middleware/auth';
 const userRouter = express.Router();
 
 userRouter.post('/registration', registrationUser);
