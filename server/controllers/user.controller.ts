@@ -21,6 +21,8 @@ import { ValidateMessage } from '../constant/ValidateMessage';
 import sendToken from '../utils/jwt';
 import { SuccessMessage } from '../constant/Common';
 import { redis } from '../utils/redis';
+import { getUserById } from '../services/user.service';
+import { ApiResponse } from '../utils/response';
 
 /** Register User */
 export const registrationUser = CatchAsyncError(
@@ -209,3 +211,17 @@ export const logoutUser = CatchAsyncError(
     }
   }
 );
+
+/** Get User Info */
+export const getUserInfoById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req?.user?._id;
+  const result = await getUserById(userId, next);
+  if (result) {
+    const message = result.message ?? SuccessMessage.OK;
+    new ApiResponse(result, StatusCode.OK, message);
+  }
+};

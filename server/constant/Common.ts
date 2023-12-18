@@ -10,6 +10,8 @@ const Role = {
 
 const SuccessMessage = {
   logoutUser: 'Logged out successfully',
+  Success: 'Success',
+  OK: 'OK',
 };
 
 export { PasswordConst, Role, SuccessMessage };

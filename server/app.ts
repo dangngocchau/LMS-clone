@@ -20,6 +20,7 @@ app.use(
 /** Routes */
 app.use('/api/v1', userRouter);
 
+/** Just testing !!! */
 app.get('/test', (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
     success: true,
