@@ -25,20 +25,10 @@ export const ErrorMiddleware = (
     err = new ErrorHandler(message, StatusCode.BAD_REQUEST);
   }
 
-  /** Wrong jwt error */
-  if (err.code === ErrorName.JWT) {
-    const message = `Json web token is invalid, try again`;
-    err = new ErrorHandler(message, StatusCode.BAD_REQUEST);
-  }
-
-  /** Wrong expired error */
-  if (err.code === ErrorName.TokenExpired) {
-    const message = `Json web token is invalid, try again`;
-    err = new ErrorHandler(message, StatusCode.BAD_REQUEST);
-  }
-
   res.status(err.statusCode).json({
     success: false,
+    name: err.name,
     message: err.message,
+    statusCode: err.statusCode,
   });
 };

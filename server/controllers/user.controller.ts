@@ -221,7 +221,6 @@ export const getUserInfoById = async (
   const userId = req?.user?._id;
   const result = await getUserById(userId, next);
   if (result) {
-    const message = result.message ?? SuccessMessage.OK;
-    new ApiResponse(result, StatusCode.OK, message);
+    new ApiResponse(result, StatusCode.OK).send(res);
   }
 };

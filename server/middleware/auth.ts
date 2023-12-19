@@ -13,37 +13,45 @@ import sendToken, {
 /** Authenticated User */
 export const isAuthenticated = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
-    const accessToken = req?.cookies?.access_token as string;
-    /** Check user login or not */
-    if (!accessToken) {
-      return next(
-        new ErrorHandler(ErrorMessage.ACCESS_RESOURCE, StatusCode.UNAUTHORIZED)
-      );
+    try {
+      const accessToken = req?.cookies?.access_token as string;
+      /** Check user login or not */
+      if (!accessToken) {
+        return next(
+          new ErrorHandler(
+            ErrorMessage.ACCESS_RESOURCE,
+            StatusCode.UNAUTHORIZED
+          )
+        );
+      }
+
+      const decoded = (await jwt.verify(
+        accessToken,
+        process.env.ACCESS_TOKEN as string
+      )) as JwtPayload;
+
+      /** Check access token valid or not */
+      if (!decoded) {
+        new ErrorHandler(
+          ErrorMessage.ACCESS_TOKEN_INVALID,
+          StatusCode.UNAUTHORIZED
+        );
+      }
+
+      const user = await redis.get(decoded.id);
+      /** Check user exist */
+      if (!user) {
+        new ErrorHandler(ErrorMessage.USER_NOT_FOUND, StatusCode.BAD_REQUEST);
+      }
+
+      req.user = JSON.parse(user as string);
+      next();
+    } catch (error: any) {
+      next({
+        message: error.message,
+        statusCode: StatusCode.UNAUTHORIZED,
+      });
     }
-
-    const decoded = (await jwt.verify(
-      accessToken,
-      process.env.ACCESS_TOKEN as string
-    )) as JwtPayload;
-
-    /** Check access token valid or not */
-    if (!decoded) {
-      new ErrorHandler(
-        ErrorMessage.ACCESS_TOKEN_INVALID,
-        StatusCode.UNAUTHORIZED
-      );
-    }
-
-    const user = await redis.get(decoded.id);
-    /** Check user exist */
-    if (!user) {
-      new ErrorHandler(ErrorMessage.USER_NOT_FOUND, StatusCode.BAD_REQUEST);
-    }
-
-    // const userJsonParse = JSON.parse(user as string);
-
-    req.user = JSON.parse(user as string);
-    next();
   }
 );
 

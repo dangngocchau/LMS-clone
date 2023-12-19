@@ -8,9 +8,9 @@ import { SuccessMessage } from '../constant/Common';
 export const getUserById = async (id: string, next: NextFunction) => {
   try {
     const user = await UserModel.findById(id);
+
     return {
-      ...user,
-      message: SuccessMessage.Success,
+      ...user?.toObject(),
     };
   } catch (error: any) {
     next(new ErrorHandler(error.message, StatusCode.BAD_REQUEST));

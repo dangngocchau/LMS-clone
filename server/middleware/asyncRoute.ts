@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 
 export const asyncRouteHandler = (
   fn: (arg0: Request, arg1: Response, arg2: NextFunction) => any
