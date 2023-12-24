@@ -6,6 +6,8 @@ const ErrorMessage = {
   ACCESS_TOKEN_INVALID: 'Access token is not valid',
   USER_NOT_FOUND: 'User not found',
   COULD_NOT_REFRESH_TOKEN: 'Could not refresh token',
+  INVALID_OLD_PASSWORD: 'Invalid old password',
+  INVALID_USER: 'Invalid user',
 };
 
 const ErrorName = {

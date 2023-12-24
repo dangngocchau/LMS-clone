@@ -21,7 +21,13 @@ import { ValidateMessage } from '../constant/ValidateMessage';
 import sendToken from '../utils/jwt';
 import { SuccessMessage } from '../constant/Common';
 import { redis } from '../utils/redis';
-import { getUserById } from '../services/user.service';
+import {
+  getUserById,
+  getUserBySocialAuthLogin,
+  updatePasswordById,
+  updateProfilePictureById,
+  updateUserInfoById,
+} from '../services/user.service';
 import { ApiResponse } from '../utils/response';
 
 /** Register User */
@@ -182,7 +188,7 @@ export const loginUser = CatchAsyncError(
         );
       }
 
-      sendToken(user, StatusCode.OK, res);
+      sendToken(user, StatusCode.OK, res, SuccessMessage.loginUser);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, StatusCode.BAD_REQUEST));
     }
@@ -220,6 +226,51 @@ export const getUserInfoById = async (
 ) => {
   const userId = req?.user?._id;
   const result = await getUserById(userId, next);
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};
+
+/** Social Auth */
+export const socialAuth = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  await getUserBySocialAuthLogin(req, res, next);
+};
+
+/** Update User Info */
+export const updateUserInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await updateUserInfoById(req, res, next);
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};
+
+/** Update User Password */
+export const updatePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await updatePasswordById(req, res, next);
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};
+
+/** Update User Password */
+export const updateProfilePicture = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await updateProfilePictureById(req, res, next);
   if (result) {
     new ApiResponse(result, StatusCode.OK).send(res);
   }

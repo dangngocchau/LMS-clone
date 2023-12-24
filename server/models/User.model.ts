@@ -27,7 +27,6 @@ const UserSchema: Schema<IUser> = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: [true, ValidateMessage.RequriePassword],
       minlength: [PasswordConst.MIN, ValidateMessage.MinLengthPassword],
       select: false,
     },

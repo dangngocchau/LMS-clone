@@ -7,6 +7,7 @@ const ValidateMessage = {
   ExistUser: 'User already exist',
   RequireEmailOrPassword: 'Please enter email and password',
   InvalidEmailOrPassword: 'Invalid email or password',
+  RequireNewAndOldPassword: 'Please enter old password and new password',
 };
 
 export { ValidateMessage };

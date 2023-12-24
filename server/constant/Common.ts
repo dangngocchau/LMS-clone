@@ -9,9 +9,11 @@ const Role = {
 };
 
 const SuccessMessage = {
-  logoutUser: 'Logged out successfully',
+  logoutUser: 'Logged out successfully !',
+  loginUser: 'Loggin successfully !',
   Success: 'Success',
   OK: 'OK',
+  SendTokenSuccess: 'Send token successfully !',
 };
 
 export { PasswordConst, Role, SuccessMessage };

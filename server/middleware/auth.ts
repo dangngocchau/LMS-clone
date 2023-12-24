@@ -37,7 +37,7 @@ export const isAuthenticated = CatchAsyncError(
           StatusCode.UNAUTHORIZED
         );
       }
-
+      /** Push user login info to redis so have to go redis and get back user login info */
       const user = await redis.get(decoded.id);
       /** Check user exist */
       if (!user) {
@@ -114,6 +114,9 @@ export const updateAccessToken = CatchAsyncError(
           expiresIn: '3d',
         }
       );
+
+      req.user = user;
+
       res.cookie('access_token', accessToken, accessTokenOptions);
       res.cookie('refresh_token', refreshToken, refreshTokenOptions);
 
