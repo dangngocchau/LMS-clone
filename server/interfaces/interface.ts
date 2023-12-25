@@ -81,6 +81,7 @@ interface IUpdateProfilePicture {
 interface IComment extends Document {
   user: object;
   comment: string;
+  commentReplies?: IComment[];
 }
 interface IReview extends Document {
   user: object;
@@ -98,13 +99,12 @@ interface ICourseData extends Document {
   title: string;
   description: string;
   videoUrl: string;
-  videoThumbnail: object;
   videoSection: string;
   videoLength: number;
   videoPlayer: string;
   links: ILink[];
   suggestion: string;
-  question: IComment[];
+  questions: IComment[];
 }
 
 interface ICourse extends Document {
@@ -138,4 +138,8 @@ export {
   IUpdatePassword,
   IUpdateProfilePicture,
   ICourse,
+  IReview,
+  ILink,
+  IComment,
+  ICourseData,
 };
