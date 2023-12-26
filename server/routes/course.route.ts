@@ -5,7 +5,12 @@ import {
   updateAccessToken,
 } from '../middleware/auth';
 import { asyncRouteHandler } from '../middleware/asyncRoute';
-import { uploadCourse } from '../controllers/course.controller';
+import {
+  editCourse,
+  getAllCourses,
+  getSingleCourse,
+  uploadCourse,
+} from '../controllers/course.controller';
 const courseRouter = express.Router();
 
 courseRouter.post(
@@ -14,5 +19,15 @@ courseRouter.post(
   authorizeRoles('admin'),
   asyncRouteHandler(uploadCourse)
 );
+
+courseRouter.put(
+  '/edit-course/:id',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  asyncRouteHandler(editCourse)
+);
+
+courseRouter.get('/get-course/:id', asyncRouteHandler(getSingleCourse));
+courseRouter.get('/get-all-courses', asyncRouteHandler(getAllCourses));
 
 export default courseRouter;
