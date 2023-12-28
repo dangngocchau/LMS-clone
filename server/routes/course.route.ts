@@ -6,8 +6,10 @@ import {
 } from '../middleware/auth';
 import { asyncRouteHandler } from '../middleware/asyncRoute';
 import {
+  addQuestionToCourse,
   editCourse,
   getAllCourses,
+  getCourseContent,
   getSingleCourse,
   uploadCourse,
 } from '../controllers/course.controller';
@@ -19,15 +21,23 @@ courseRouter.post(
   authorizeRoles('admin'),
   asyncRouteHandler(uploadCourse)
 );
-
 courseRouter.put(
   '/edit-course/:id',
   isAuthenticated,
   authorizeRoles('admin'),
   asyncRouteHandler(editCourse)
 );
-
 courseRouter.get('/get-course/:id', asyncRouteHandler(getSingleCourse));
 courseRouter.get('/get-all-courses', asyncRouteHandler(getAllCourses));
+courseRouter.get(
+  '/get-course-content/:id',
+  isAuthenticated,
+  asyncRouteHandler(getCourseContent)
+);
+courseRouter.put(
+  '/add-question',
+  isAuthenticated,
+  asyncRouteHandler(addQuestionToCourse)
+);
 
 export default courseRouter;

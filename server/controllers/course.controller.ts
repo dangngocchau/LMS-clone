@@ -51,3 +51,29 @@ export const getAllCourses = async (
     new ApiResponse(result, StatusCode.OK).send(res);
   }
 };
+
+/** Get Course Content */
+export const getCourseContent = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await courseService.getCourseByUser(req, res, next);
+
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};
+
+/** Add Question To Course */
+export const addQuestionToCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await courseService.addQuestion(req, res, next);
+
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};

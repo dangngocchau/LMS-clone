@@ -10,7 +10,7 @@ interface IUser extends Document {
   };
   role: string;
   isVerified: boolean;
-  courses: Array<{ courseId: string }>;
+  courses: Array<{ _id: string }>;
   comparePassword: (password: string) => Promise<boolean>;
   SignAccessToken: () => string;
   SignRefreshToken: () => string;
@@ -78,10 +78,10 @@ interface IUpdateProfilePicture {
   avatar: string;
 }
 
-interface IComment extends Document {
+interface IComment {
   user: object;
-  comment: string;
-  commentReplies?: IComment[];
+  question: string;
+  questionReplies?: IComment[];
 }
 interface IReview extends Document {
   user: object;
@@ -108,6 +108,7 @@ interface ICourseData extends Document {
 }
 
 interface ICourse extends Document {
+  _id: string;
   name: string;
   description?: string;
   price: number;
@@ -122,6 +123,18 @@ interface ICourse extends Document {
   courseData: ICourseData[];
   ratings?: number;
   purchased?: number;
+}
+
+interface IAddQuestionData {
+  question: string;
+  courseId: string;
+  contentId: string;
+}
+
+interface INewQuestion {
+  user: IUser;
+  question: string;
+  questionReplies: any;
 }
 
 export {
@@ -142,4 +155,6 @@ export {
   ILink,
   IComment,
   ICourseData,
+  IAddQuestionData,
+  INewQuestion,
 };

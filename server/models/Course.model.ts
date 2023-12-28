@@ -21,10 +21,10 @@ const LinkSchema = new Schema<ILink>({
   url: String,
 });
 
-const CommentSchema = new Schema<IComment>({
+const CommentSchema = new Schema<IComment & Document>({
   user: Object,
-  comment: String,
-  commentReplies: [Object],
+  question: String,
+  questionReplies: [Object],
 });
 
 const CourseDataSchema = new Schema<ICourseData>({
