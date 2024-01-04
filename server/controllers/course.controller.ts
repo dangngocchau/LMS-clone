@@ -77,3 +77,16 @@ export const addQuestionToCourse = async (
     new ApiResponse(result, StatusCode.OK).send(res);
   }
 };
+
+/** Add Anwer To Course */
+export const addAnswerToCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await courseService.addAnswer(req, res, next);
+
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};

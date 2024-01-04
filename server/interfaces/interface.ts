@@ -79,9 +79,15 @@ interface IUpdateProfilePicture {
 }
 
 interface IComment {
-  user: object;
+  user: IUser;
   question: string;
-  questionReplies?: IComment[];
+  questionReplies?: IAnswer[];
+}
+
+interface ICommentDocument extends Document {
+  user?: IUser;
+  question?: string;
+  questionReplies?: IAnswer[];
 }
 interface IReview extends Document {
   user: object;
@@ -137,6 +143,18 @@ interface INewQuestion {
   questionReplies: any;
 }
 
+interface IAddAnswerData {
+  answer: string;
+  courseId: string;
+  contentId: string;
+  questionId: string;
+}
+
+interface IAnswer {
+  user: IUser;
+  answer: string;
+}
+
 export {
   IUser,
   IRegistrationBody,
@@ -154,7 +172,10 @@ export {
   IReview,
   ILink,
   IComment,
+  IAnswer,
   ICourseData,
   IAddQuestionData,
   INewQuestion,
+  IAddAnswerData,
+  ICommentDocument,
 };

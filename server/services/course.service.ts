@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import cloudinary from 'cloudinary';
-import { url } from 'inspector';
 import CourseModel from '../models/Course.model';
 import {
+  IAddAnswerData,
   IAddQuestionData,
+  IAnswer,
   IComment,
+  ICommentDocument,
   ICourse,
   ICourseData,
   INewQuestion,
@@ -14,6 +16,11 @@ import { redis } from '../utils/redis';
 import ErrorHandler from '../utils/ErrorHandler';
 import { StatusCode } from '../constant/StatusCode';
 import mongoose from 'mongoose';
+import { Document } from 'mongoose';
+import { title } from 'process';
+import path from 'path';
+import ejs, { name } from 'ejs';
+import sendMail from '../utils/sendMail';
 
 /** Create Course */
 const createCourse = async (
@@ -198,6 +205,77 @@ const addQuestion = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+/** Add Answer */
+const addAnswer = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { answer, contentId, courseId, questionId }: IAddAnswerData =
+      req.body;
+
+    const course = await CourseModel.findById(courseId);
+    const courseContent = course?.courseData?.find((item: ICourseData) =>
+      item._id?.equals(contentId)
+    );
+
+    if (!mongoose.Types.ObjectId.isValid(contentId) || !courseContent) {
+      return next(
+        new ErrorHandler('Invalid content Id', StatusCode.BAD_REQUEST)
+      );
+    }
+    // TODO: Check type for item -> Add type Document of mongoose have _id
+
+    const question = courseContent?.questions?.find((item: any) =>
+      item._id?.equals(questionId)
+    );
+
+    // console.log(courseContent?.questions[0], question);
+
+    if (!question) {
+      return next(
+        new ErrorHandler('This Question not found', StatusCode.BAD_REQUEST)
+      );
+    }
+    /** Create answer object */
+    const newAnswer: IAnswer = {
+      user: req?.user as IUser,
+      answer,
+    };
+    /** Add answer to course content */
+    question?.questionReplies?.push(newAnswer);
+    await course?.save();
+
+    if (req.user?._id === question?.user._id) {
+      // Create notification
+    } else {
+      const data = {
+        name: question.user.name,
+        title: courseContent.title,
+      };
+      /** Send email */
+      const html = await ejs.renderFile(
+        path.join(__dirname, '../mails/question-reply.ejs'),
+        data
+      );
+
+      try {
+        await sendMail({
+          email: question?.user?.email,
+          subject: 'Question Reply',
+          template: 'question-reply.ejs',
+          data,
+        });
+      } catch (error) {
+        next(error);
+      }
+    }
+
+    return {
+      ...course?.toObject(),
+    };
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   createCourse,
   editCourse,
@@ -205,4 +283,5 @@ export {
   getAllCourses,
   getCourseByUser,
   addQuestion,
+  addAnswer,
 };

@@ -6,6 +6,7 @@ import {
 } from '../middleware/auth';
 import { asyncRouteHandler } from '../middleware/asyncRoute';
 import {
+  addAnswerToCourse,
   addQuestionToCourse,
   editCourse,
   getAllCourses,
@@ -38,6 +39,17 @@ courseRouter.put(
   '/add-question',
   isAuthenticated,
   asyncRouteHandler(addQuestionToCourse)
+);
+courseRouter.put(
+  '/add-question',
+  isAuthenticated,
+  asyncRouteHandler(addQuestionToCourse)
+);
+
+courseRouter.put(
+  '/add-answer',
+  isAuthenticated,
+  asyncRouteHandler(addAnswerToCourse)
 );
 
 export default courseRouter;
