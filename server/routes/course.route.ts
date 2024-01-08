@@ -8,6 +8,8 @@ import { asyncRouteHandler } from '../middleware/asyncRoute';
 import {
   addAnswerToCourse,
   addQuestionToCourse,
+  addReplyReviewToCourse,
+  addReviewToCourse,
   editCourse,
   getAllCourses,
   getCourseContent,
@@ -50,6 +52,19 @@ courseRouter.put(
   '/add-answer',
   isAuthenticated,
   asyncRouteHandler(addAnswerToCourse)
+);
+
+courseRouter.put(
+  '/add-review/:id',
+  isAuthenticated,
+  asyncRouteHandler(addReviewToCourse)
+);
+
+courseRouter.put(
+  '/add-reply-review',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  asyncRouteHandler(addReplyReviewToCourse)
 );
 
 export default courseRouter;

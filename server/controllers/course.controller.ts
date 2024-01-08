@@ -90,3 +90,29 @@ export const addAnswerToCourse = async (
     new ApiResponse(result, StatusCode.OK).send(res);
   }
 };
+
+/** Add Review To Course */
+export const addReviewToCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await courseService.addReview(req, res, next);
+
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};
+
+/** Add Reply Review To Course */
+export const addReplyReviewToCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await courseService.addReplyReviewCourse(req, res, next);
+
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};

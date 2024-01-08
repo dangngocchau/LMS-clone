@@ -4,12 +4,14 @@ import CourseModel from '../models/Course.model';
 import {
   IAddAnswerData,
   IAddQuestionData,
+  IAddReviewData,
   IAnswer,
   IComment,
   ICommentDocument,
   ICourse,
   ICourseData,
   INewQuestion,
+  IReplyReviewData,
   IUser,
 } from '../interfaces/interface';
 import { redis } from '../utils/redis';
@@ -276,6 +278,97 @@ const addAnswer = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+/** Add Review Course */
+const addReview = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userCourseList = req.user?.courses;
+    const { review, rating }: IAddReviewData = req.body;
+    const initialRating = 0;
+    const courseId = req.params.id;
+    /** Check course Id already exist in course list base on _id */
+    const courseExists = userCourseList?.some(
+      (course) => course._id.toString() === courseId.toString()
+    );
+    if (!courseExists) {
+      return next(
+        new ErrorHandler(
+          'You are no eligible to access this course',
+          StatusCode.FORBIDDEN
+        )
+      );
+    }
+
+    const course = await CourseModel.findById(courseId);
+    if (course) {
+      const reviewData: any = {
+        user: req.user,
+        comment: review,
+        rating,
+      };
+      course?.reviews.push(reviewData);
+
+      /** Sum of all rating course */
+      const sumOfRating = course?.reviews.reduce(
+        (accumulator, currentValue) => accumulator + currentValue?.rating,
+        initialRating
+      );
+      course.ratings = sumOfRating || initialRating / course?.reviews.length;
+      await course?.save();
+
+      /** Send notification */
+      const notification = {
+        title: 'New Review Received',
+        message: `${req?.user?.name} has given a review in ${course?.name}`,
+      };
+      // TODO: Create notification here
+
+      return {
+        ...course.toObject(),
+      };
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Add Reply Review Course */
+const addReplyReviewCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { comment, courseId, reviewId }: IReplyReviewData = req?.body;
+
+    const course = await CourseModel.findById(courseId);
+    if (!course) {
+      return next(new ErrorHandler('Course not found', StatusCode.NOT_FOUND));
+    }
+
+    const review = course?.reviews.find(
+      (review) => review?._id.toString() === reviewId
+    );
+    if (!review) {
+      return next(new ErrorHandler('Review not found', StatusCode.NOT_FOUND));
+    }
+
+    /** Reply body */
+    const replyData: any = {
+      user: req?.user,
+      comment,
+    };
+
+    review.commentReplies?.push(replyData);
+    await course.save();
+
+    return {
+      ...course.toObject(),
+    };
+  } catch (error) {
+    next(error);
+  }
+};
+
 export {
   createCourse,
   editCourse,
@@ -284,4 +377,6 @@ export {
   getCourseByUser,
   addQuestion,
   addAnswer,
+  addReview,
+  addReplyReviewCourse,
 };

@@ -90,10 +90,10 @@ interface ICommentDocument extends Document {
   questionReplies?: IAnswer[];
 }
 interface IReview extends Document {
-  user: object;
+  user: IUser;
   rating: number;
   comment: string;
-  commentReplies: IComment[];
+  commentReplies?: IComment[];
 }
 
 interface ILink extends Document {
@@ -125,7 +125,7 @@ interface ICourse extends Document {
   demoUrl: string;
   benefits: { title: string }[];
   prerequisites: { title: string }[];
-  review: IReview[];
+  reviews: IReview[];
   courseData: ICourseData[];
   ratings?: number;
   purchased?: number;
@@ -155,6 +155,19 @@ interface IAnswer {
   answer: string;
 }
 
+interface IAddReviewData {
+  review: string;
+  courseId: string;
+  rating: number;
+  userId: string;
+}
+
+interface IReplyReviewData {
+  comment: string;
+  courseId: string;
+  reviewId: string;
+}
+
 export {
   IUser,
   IRegistrationBody,
@@ -178,4 +191,6 @@ export {
   INewQuestion,
   IAddAnswerData,
   ICommentDocument,
+  IAddReviewData,
+  IReplyReviewData,
 };

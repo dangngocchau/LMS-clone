@@ -14,6 +14,7 @@ const ReviewSchema = new Schema<IReview>({
     default: 0,
   },
   comment: String,
+  commentReplies: [Object],
 });
 
 const LinkSchema = new Schema<ILink>({
@@ -77,7 +78,7 @@ const CourseSchema = new Schema<ICourse>({
   },
   benefits: [{ title: String }],
   prerequisites: [{ title: String }],
-  review: [ReviewSchema],
+  reviews: [ReviewSchema],
   courseData: [CourseDataSchema],
   ratings: {
     type: Number,
