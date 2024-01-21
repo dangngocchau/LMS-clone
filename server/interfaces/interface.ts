@@ -168,6 +168,19 @@ interface IReplyReviewData {
   reviewId: string;
 }
 
+interface IOrder extends Document {
+  userId: string;
+  courseId: string;
+  payment_info: object;
+}
+
+interface INotification extends Document {
+  title: string;
+  message: string;
+  status: string;
+  userId: string;
+}
+
 export {
   IUser,
   IRegistrationBody,
@@ -193,4 +206,6 @@ export {
   ICommentDocument,
   IAddReviewData,
   IReplyReviewData,
+  IOrder,
+  INotification,
 };
