@@ -14,3 +14,15 @@ export const createOrder = async (
     new ApiResponse(result, StatusCode.CREATED).send(res);
   }
 };
+
+/** Get All Orders -- Only For Admin */
+export const getAllOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await orderService.getAllOrdersForAdmin(req, res, next);
+  if (result) {
+    new ApiResponse(result, StatusCode.CREATED).send(res);
+  }
+};

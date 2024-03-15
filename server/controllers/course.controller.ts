@@ -116,3 +116,16 @@ export const addReplyReviewToCourse = async (
     new ApiResponse(result, StatusCode.OK).send(res);
   }
 };
+
+/** Get All Course -- For Admin Only */
+export const getAllCoursesForAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await courseService.getAllCoursesForAdmin(req, res, next);
+
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};

@@ -22,6 +22,7 @@ import sendToken from '../utils/jwt';
 import { SuccessMessage } from '../constant/Common';
 import { redis } from '../utils/redis';
 import {
+  getAllUsersService,
   getUserById,
   getUserBySocialAuthLogin,
   updatePasswordById,
@@ -271,6 +272,18 @@ export const updateProfilePicture = async (
   next: NextFunction
 ) => {
   const result = await updateProfilePictureById(req, res, next);
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};
+
+/** Get All Users -- Only For Admin */
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await getAllUsersService(req, res, next);
   if (result) {
     new ApiResponse(result, StatusCode.OK).send(res);
   }

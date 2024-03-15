@@ -183,3 +183,17 @@ export const updateProfilePictureById = async (
     next(error);
   }
 };
+
+//Get All Users -- Only For Admin
+export const getAllUsersService = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // const usersJson = await redis.get("users");
+  const users = await UserModel.find().sort({
+    createdAt: -1,
+  });
+
+  return users;
+};

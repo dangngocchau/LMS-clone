@@ -108,4 +108,18 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { createOrder };
+//Get All Orders -- Only For Admin
+const getAllOrdersForAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // const usersJson = await redis.get("users");
+  const orders = await OrderModel.find().sort({
+    createdAt: -1,
+  });
+
+  return orders;
+};
+
+export { createOrder, getAllOrdersForAdmin };

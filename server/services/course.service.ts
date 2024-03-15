@@ -23,6 +23,7 @@ import { title } from 'process';
 import path from 'path';
 import ejs, { name } from 'ejs';
 import sendMail from '../utils/sendMail';
+import NotificationModel from '../models/Notification.model';
 
 /** Create Course */
 const createCourse = async (
@@ -196,6 +197,13 @@ const addQuestion = async (req: Request, res: Response, next: NextFunction) => {
     };
     /** Add this question to our course content */
     courseContent.questions.push(newQuestion);
+    /** Add notifications question */
+    await NotificationModel.create({
+      userId: req?.user?._id,
+      title: 'New Question Received',
+      message: `You have a new question from ${courseContent?.title}`,
+    });
+
     /** Save the updated course */
     const updatedCourse = await course?.save();
 
@@ -245,8 +253,12 @@ const addAnswer = async (req: Request, res: Response, next: NextFunction) => {
     question?.questionReplies?.push(newAnswer);
     await course?.save();
 
-    if (req.user?._id === question?.user._id) {
-      // Create notification
+    if (req?.user?._id === question?.user._id) {
+      await NotificationModel.create({
+        userId: req?.user?._id,
+        title: 'New Question Reply Received',
+        message: `You have a new question reply in this ${courseContent?.title}`,
+      });
     } else {
       const data = {
         name: question.user.name,
@@ -315,12 +327,12 @@ const addReview = async (req: Request, res: Response, next: NextFunction) => {
       course.ratings = sumOfRating || initialRating / course?.reviews.length;
       await course?.save();
 
-      /** Send notification */
-      const notification = {
+      // TODO: Create notification here
+      await NotificationModel.create({
+        userId: req?.user?._id,
         title: 'New Review Received',
         message: `${req?.user?.name} has given a review in ${course?.name}`,
-      };
-      // TODO: Create notification here
+      });
 
       return {
         ...course.toObject(),
@@ -369,6 +381,19 @@ const addReplyReviewCourse = async (
   }
 };
 
+/** Get All Courses -- Only For Admin */
+const getAllCoursesForAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const courses = await CourseModel.find().sort({
+    createdAt: -1,
+  });
+
+  return courses;
+};
+
 export {
   createCourse,
   editCourse,
@@ -379,4 +404,5 @@ export {
   addAnswer,
   addReview,
   addReplyReviewCourse,
+  getAllCoursesForAdmin,
 };
