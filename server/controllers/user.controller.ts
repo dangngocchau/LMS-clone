@@ -22,12 +22,14 @@ import sendToken from '../utils/jwt';
 import { SuccessMessage } from '../constant/Common';
 import { redis } from '../utils/redis';
 import {
+  deleteUserRoleForAdmin,
   getAllUsersService,
   getUserById,
   getUserBySocialAuthLogin,
   updatePasswordById,
   updateProfilePictureById,
   updateUserInfoById,
+  updateUserRoleForAdmin,
 } from '../services/user.service';
 import { ApiResponse } from '../utils/response';
 
@@ -278,12 +280,36 @@ export const updateProfilePicture = async (
 };
 
 /** Get All Users -- Only For Admin */
-export const getAllUsers = async (
+export const getAllUsersForAdmin = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const result = await getAllUsersService(req, res, next);
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};
+
+/** Update User Role -- Only For Admin */
+export const updateUserRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await updateUserRoleForAdmin(req, res, next);
+  if (result) {
+    new ApiResponse(result, StatusCode.OK).send(res);
+  }
+};
+
+/** Delete User -- Only For Admin */
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await deleteUserRoleForAdmin(req, res, next);
   if (result) {
     new ApiResponse(result, StatusCode.OK).send(res);
   }

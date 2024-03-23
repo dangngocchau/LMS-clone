@@ -387,11 +387,40 @@ const getAllCoursesForAdmin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const courses = await CourseModel.find().sort({
-    createdAt: -1,
-  });
+  try {
+    const courses = await CourseModel.find().sort({
+      createdAt: -1,
+    });
 
-  return courses;
+    return courses;
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**Delete Course -- OnLy For Admin */
+const deleteCourseForAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const course = await CourseModel.findById(id);
+
+    if (!course) {
+      return next(new ErrorHandler('Course Id Wrong', 404));
+    }
+
+    await course.deleteOne({ id });
+    await redis.del(id);
+
+    return {
+      ...course?.toObject(),
+    };
+  } catch (error) {
+    next(error);
+  }
 };
 
 export {
@@ -405,4 +434,5 @@ export {
   addReview,
   addReplyReviewCourse,
   getAllCoursesForAdmin,
+  deleteCourseForAdmin,
 };

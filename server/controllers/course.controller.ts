@@ -129,3 +129,18 @@ export const getAllCoursesForAdmin = async (
     new ApiResponse(result, StatusCode.OK).send(res);
   }
 };
+
+/** Delete Course -- For Admin Only */
+export const deleteCourse = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = await courseService.deleteCourseForAdmin(req, res, next);
+
+  if (result) {
+    new ApiResponse(result, StatusCode.OK, 'Course delete successfully').send(
+      res
+    );
+  }
+};

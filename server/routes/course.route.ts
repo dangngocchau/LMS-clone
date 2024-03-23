@@ -1,17 +1,15 @@
 import express from 'express';
-import {
-  authorizeRoles,
-  isAuthenticated,
-  updateAccessToken,
-} from '../middleware/auth';
+import { authorizeRoles, isAuthenticated } from '../middleware/auth';
 import { asyncRouteHandler } from '../middleware/asyncRoute';
 import {
   addAnswerToCourse,
   addQuestionToCourse,
   addReplyReviewToCourse,
   addReviewToCourse,
+  deleteCourse,
   editCourse,
   getAllCourses,
+  getAllCoursesForAdmin,
   getCourseContent,
   getSingleCourse,
   uploadCourse,
@@ -32,6 +30,12 @@ courseRouter.put(
 );
 courseRouter.get('/get-course/:id', asyncRouteHandler(getSingleCourse));
 courseRouter.get('/get-all-courses', asyncRouteHandler(getAllCourses));
+courseRouter.get(
+  '/get-courses',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  asyncRouteHandler(getAllCoursesForAdmin)
+);
 courseRouter.get(
   '/get-course-content/:id',
   isAuthenticated,
@@ -65,6 +69,13 @@ courseRouter.put(
   isAuthenticated,
   authorizeRoles('admin'),
   asyncRouteHandler(addReplyReviewToCourse)
+);
+
+courseRouter.delete(
+  '/delete-course/:id',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  asyncRouteHandler(deleteCourse)
 );
 
 export default courseRouter;

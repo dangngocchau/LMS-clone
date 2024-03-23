@@ -184,16 +184,63 @@ export const updateProfilePictureById = async (
   }
 };
 
-//Get All Users -- Only For Admin
+/** Get All Users -- Only For Admin */
 export const getAllUsersService = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // const usersJson = await redis.get("users");
-  const users = await UserModel.find().sort({
-    createdAt: -1,
-  });
+  try {
+    // const usersJson = await redis.get("users");
+    const users = await UserModel.find().sort({
+      createdAt: -1,
+    });
 
-  return users;
+    return users;
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**Update User Role -- OnLy For Admin */
+export const updateUserRoleForAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id, role } = req.body;
+    const user = await UserModel.findByIdAndUpdate(id, { role }, { new: true });
+
+    return {
+      ...user?.toObject(),
+    };
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**Delete User Role -- OnLy For Admin */
+export const deleteUserRoleForAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = await UserModel.findById(id);
+
+    if (!user) {
+      return next(new ErrorHandler('User Id Wrong', 404));
+    }
+
+    await user.deleteOne({ id });
+    await redis.del(id);
+
+    return {
+      ...user?.toObject(),
+    };
+  } catch (error) {
+    next(error);
+  }
 };

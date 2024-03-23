@@ -1,6 +1,8 @@
 import express from 'express';
 import {
   activateUser,
+  deleteUser,
+  getAllUsersForAdmin,
   getUserInfoById,
   loginUser,
   logoutUser,
@@ -10,11 +12,22 @@ import {
   updateProfilePicture,
   // updatePassword,
   updateUserInfo,
+  updateUserRole,
 } from '../controllers/user.controller';
-import { isAuthenticated, updateAccessToken } from '../middleware/auth';
+import {
+  authorizeRoles,
+  isAuthenticated,
+  updateAccessToken,
+} from '../middleware/auth';
 import { asyncRouteHandler } from '../middleware/asyncRoute';
 const userRouter = express.Router();
 
+userRouter.get(
+  '/get-users',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  getAllUsersForAdmin
+);
 userRouter.post('/registration', registrationUser);
 userRouter.post('/activate-user', activateUser);
 userRouter.post('/login', loginUser);
@@ -36,6 +49,18 @@ userRouter.put(
   '/update-avatar',
   isAuthenticated,
   asyncRouteHandler(updateProfilePicture)
+);
+userRouter.put(
+  '/update-role',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  asyncRouteHandler(updateUserRole)
+);
+userRouter.put(
+  '/delete-user/:id',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  asyncRouteHandler(deleteUser)
 );
 
 export default userRouter;
