@@ -8,6 +8,7 @@ import courseRouter from './routes/course.route';
 import orderRouter from './routes/order.route';
 import notificationsRouter from './routes/notification.route';
 import analyticsRouter from './routes/analytics.route';
+import layoutRouter from './routes/layout.route';
 export const app = express();
 
 /** Body Parser */
@@ -27,6 +28,7 @@ app.use('/api/v1', courseRouter);
 app.use('/api/v1', orderRouter);
 app.use('/api/v1', notificationsRouter);
 app.use('/api/v1', analyticsRouter);
+app.use('/api/v1', layoutRouter);
 
 /** Just testing !!! */
 app.get('/test', (req: Request, res: Response, next: NextFunction) => {
