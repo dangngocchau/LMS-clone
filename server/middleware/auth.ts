@@ -41,7 +41,7 @@ export const isAuthenticated = CatchAsyncError(
       const user = await redis.get(decoded.id);
       /** Check user exist */
       if (!user) {
-        new ErrorHandler(ErrorMessage.USER_NOT_FOUND, StatusCode.BAD_REQUEST);
+        new ErrorHandler(ErrorMessage.ACCESS_RESOURCE, StatusCode.BAD_REQUEST);
       }
 
       req.user = JSON.parse(user as string);
@@ -92,10 +92,7 @@ export const updateAccessToken = CatchAsyncError(
       const session = await redis.get(decoded.id as string);
       if (!session) {
         return next(
-          new ErrorHandler(
-            ErrorMessage.COULD_NOT_REFRESH_TOKEN,
-            StatusCode.BAD_REQUEST
-          )
+          new ErrorHandler(ErrorMessage.ACCESS_RESOURCE, StatusCode.BAD_REQUEST)
         );
       }
 
@@ -119,6 +116,8 @@ export const updateAccessToken = CatchAsyncError(
 
       res.cookie('access_token', accessToken, accessTokenOptions);
       res.cookie('refresh_token', refreshToken, refreshTokenOptions);
+      /** After 7 days if user not login to website -> Remove user from redis ( Avoid to overload redis ) */
+      await redis.set(user._id, JSON.stringify(user), 'EX', 604800); // 7 days
 
       res.status(StatusCode.OK).json({
         status: 'Success',
