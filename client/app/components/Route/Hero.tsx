@@ -6,7 +6,7 @@ type Props = {};
 
 const Hero: FC<Props> = (props) => {
   return (
-    <div className='w-full h-screen justify-center items-center flex dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black'>
+    <div className='w-full h-[calc(100vh-80px)] justify-center items-center flex dark:bg-opacity-50 dark:bg-gradient-to-b dark:from-gray-900 dark:to-black'>
       <div className='flex flex-1 items-center justify-center'>
         <Image
           src={require('../../../public/assets/banner.jpg')}
