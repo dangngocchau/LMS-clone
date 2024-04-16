@@ -8,6 +8,7 @@ import { BiBookOpen } from 'react-icons/bi';
 import Image from 'next/image';
 import CustomModal from '@/app/utils/CustomModal';
 import Login from '@/app/components/Auth/Login';
+import SignUp from '@/app/components/Auth/SignUp';
 
 type Props = {
   open: boolean;
@@ -116,11 +117,19 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
           )}
         </>
       )}
-      {/* {
-        route === "Login" && (
-          <></>
-        )
-      } */}
+      {route === 'Sign-Up' && (
+        <>
+          {open && (
+            <CustomModal
+              open={open}
+              setOpen={setOpen}
+              setRoute={setRoute}
+              activeItem={activeItem}
+              component={SignUp}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 };

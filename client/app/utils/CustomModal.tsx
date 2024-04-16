@@ -1,12 +1,13 @@
 import React, { ComponentType, FC, ReactElement, ReactNode } from 'react';
 import { Modal, Box } from '@mui/material';
+import SocialAuth from '@/app/components/Auth/SocialAuth';
 
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   activeItem: number;
   component: React.ElementType;
-  setRoute?: (route: string) => void;
+  setRoute: (route: string) => void;
 };
 
 const CustomModal: FC<Props> = ({
@@ -24,6 +25,7 @@ const CustomModal: FC<Props> = ({
     >
       <Box className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none'>
         <Component setOpen={setOpen} setRoute={setRoute} />
+        <SocialAuth setRoute={setRoute} />
       </Box>
     </Modal>
   );
