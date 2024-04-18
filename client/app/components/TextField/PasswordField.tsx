@@ -7,13 +7,12 @@ import ErrorMessage from '@/app/components/Typography/ErrorMessage';
 import FieldLabel from '@/app/components/Typography/FieldLabel';
 
 type Props = {
-  label: string;
   errors: FormikErrors<ILogin>;
   touched: FormikTouched<ILogin>;
   className: string;
 };
 
-const PasswordField: FC<Props> = ({ label, errors, touched, className }) => {
+const PasswordField: FC<Props> = ({ errors, touched, className }) => {
   const [show, setShow] = useState<boolean>(false);
 
   const handleToggleIcon = () => {
@@ -23,7 +22,7 @@ const PasswordField: FC<Props> = ({ label, errors, touched, className }) => {
   return (
     <>
       <div className='w-full mt-5 relative mb-1'>
-        <FieldLabel label='Password' />
+        <FieldLabel htmlFor='password' label='Password' />
         <Field
           type='password'
           name='password'

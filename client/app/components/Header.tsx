@@ -9,6 +9,7 @@ import Image from 'next/image';
 import CustomModal from '@/app/utils/CustomModal';
 import Login from '@/app/components/Auth/Login';
 import SignUp from '@/app/components/Auth/SignUp';
+import Verification from '@/app/components/Auth/Verification';
 
 type Props = {
   open: boolean;
@@ -126,6 +127,19 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
               setRoute={setRoute}
               activeItem={activeItem}
               component={SignUp}
+            />
+          )}
+        </>
+      )}
+      {route === 'Verification' && (
+        <>
+          {open && (
+            <CustomModal
+              open={open}
+              setOpen={setOpen}
+              setRoute={setRoute}
+              activeItem={activeItem}
+              component={Verification}
             />
           )}
         </>

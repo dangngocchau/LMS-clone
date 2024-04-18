@@ -15,6 +15,7 @@ import { validateEmail, validatePassword } from '@/app/utils/Validation';
 import PasswordField from '@/app/components/TextField/PasswordField';
 import SubmitButton from '@/app/components/Button/SubmitButton';
 import AuthFooter from '@/app/components/Auth/AuthFooter';
+import SocialAuth from '@/app/components/Auth/SocialAuth';
 
 type Props = {
   setRoute: (route: string) => void;
@@ -44,13 +45,11 @@ const Login: FC<Props> = ({ setRoute }) => {
           <Form>
             <EmailField
               className={style.input}
-              label='Enter your email'
               errors={errors}
               touched={touched}
             />
             <PasswordField
               className={style.input}
-              label='Enter your email'
               errors={errors}
               touched={touched}
             />
@@ -61,6 +60,7 @@ const Login: FC<Props> = ({ setRoute }) => {
               route='Sign-Up'
               setRoute={setRoute}
             />
+            <SocialAuth setRoute={setRoute} />
           </Form>
         )}
       </Formik>
