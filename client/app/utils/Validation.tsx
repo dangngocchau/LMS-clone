@@ -7,3 +7,5 @@ export const validateEmail = Yup.string()
 export const validatePassword = Yup.string().required(
   'Please enter your password !'
 );
+
+export const validateName = Yup.string().required('Please enter your name !');

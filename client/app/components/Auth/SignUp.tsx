@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useFormik, Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -15,21 +15,44 @@ import PasswordField from '@/app/components/TextField/PasswordField';
 import SubmitButton from '@/app/components/Button/SubmitButton';
 import AuthFooter from '@/app/components/Auth/AuthFooter';
 import SocialAuth from '@/app/components/Auth/SocialAuth';
+import { useRegisterMutation } from '@/redux/features/auth/authApi';
+import toast from 'react-hot-toast';
+import { IRegister } from '@/app/components/Auth/IAuth.interface';
+import {
+  validateEmail,
+  validateName,
+  validatePassword,
+} from '@/app/utils/Validation';
 
 type Props = {
   setRoute: (route: string) => void;
 };
 
 const schema = Yup.object().shape({
-  name: Yup.string().required('Please enter your name !'),
-  email: Yup.string()
-    .email('Invalid email !')
-    .required('Please enter your email !'),
-  password: Yup.string().required('Please enter your password !'),
+  name: validateName,
+  email: validateEmail,
+  password: validatePassword,
 });
 
 const SignUp: FC<Props> = ({ setRoute }) => {
   const [show, setShow] = useState<boolean>(false);
+  const [register, { data, isSuccess, error, isLoading }] =
+    useRegisterMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.message || 'Registration successfull !';
+      toast.success(message);
+      setRoute('Verification');
+    }
+    if (error) {
+      if ('data' in error) {
+        const errorData = error as any;
+        toast.error(errorData?.data?.message);
+      }
+    }
+  }, [isSuccess, error, data?.message, setRoute]);
+
   const initialValues = {
     name: '',
     email: '',
@@ -42,8 +65,14 @@ const SignUp: FC<Props> = ({ setRoute }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={schema}
-        onSubmit={({ email, password }) => {
-          setRoute('Verification');
+        onSubmit={async ({ name, email, password }) => {
+          const data: IRegister = {
+            name,
+            email,
+            password,
+          };
+
+          await register(data);
         }}
       >
         {({ errors, touched }) => (
@@ -66,7 +95,7 @@ const SignUp: FC<Props> = ({ setRoute }) => {
               errors={errors}
               touched={touched}
             />
-            <SubmitButton label='Register' />
+            <SubmitButton label='Register' isLoading={isLoading} />
             <AuthFooter
               message='Already have account ?'
               label='Login'

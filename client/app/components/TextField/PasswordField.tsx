@@ -24,7 +24,7 @@ const PasswordField: FC<Props> = ({ errors, touched, className }) => {
       <div className='w-full mt-5 relative mb-1'>
         <FieldLabel htmlFor='password' label='Password' />
         <Field
-          type='password'
+          type={!show ? 'password' : 'text'}
           name='password'
           id='password'
           placeholder='passsword!@#'

@@ -1,9 +1,15 @@
 import LargeButton from '@/app/components/Button/LargeButton';
 import TextTitle from '@/app/components/Typography/TextTitle';
 import { style } from '@/app/styles/style';
-import React, { FC, useRef, useState } from 'react';
+import { useActivationMutation } from '@/redux/features/auth/authApi';
+import { RootState } from '@reduxjs/toolkit/query';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { VscWorkspaceTrusted } from 'react-icons/vsc';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { SerializedError } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
+import { useAppSelector } from '@/app/hooks/reduxHook';
 type Props = {
   setRoute: (route: string) => void;
 };
@@ -16,6 +22,10 @@ type VerifyNumber = {
 };
 
 const Verification: FC<Props> = ({ setRoute }) => {
+  const { token } = useAppSelector((state) => state.auth);
+
+  const [activation, { isSuccess, error }] = useActivationMutation();
+
   const [invalidError, setInvalidError] = useState<boolean>(false);
   const [verifyNumber, setVerifyNumber] = useState<VerifyNumber>({
     0: '',
@@ -31,7 +41,16 @@ const Verification: FC<Props> = ({ setRoute }) => {
   ];
 
   const verificationHandler = async () => {
-    setInvalidError(true);
+    const verificationNumber = Object.values(verifyNumber).join('');
+    if (verificationNumber.length !== 4) {
+      setInvalidError(true);
+      return;
+    }
+
+    await activation({
+      activation_token: token,
+      activation_code: verificationNumber,
+    });
   };
 
   const handleInputChange = (index: number, value: string) => {
@@ -45,6 +64,22 @@ const Verification: FC<Props> = ({ setRoute }) => {
       inputRefs[index + 1].current?.focus();
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Account activated successfully!');
+      setRoute('Login');
+    }
+    if (error) {
+      if ('data' in error) {
+        const errorData = error as any;
+        toast.error(errorData.data.message);
+        setInvalidError(true);
+      } else {
+        console.log('An error occured:', error);
+      }
+    }
+  }, [isSuccess, error, setRoute]);
 
   return (
     <div>
