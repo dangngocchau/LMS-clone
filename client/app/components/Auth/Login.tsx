@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useFormik, Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -16,9 +16,13 @@ import PasswordField from '@/app/components/TextField/PasswordField';
 import SubmitButton from '@/app/components/Button/SubmitButton';
 import AuthFooter from '@/app/components/Auth/AuthFooter';
 import SocialAuth from '@/app/components/Auth/SocialAuth';
+import { useLoginMutation } from '@/redux/features/auth/authApi';
+import toast from 'react-hot-toast';
+import { useAppSelector } from '@/app/hooks/reduxHook';
 
 type Props = {
   setRoute: (route: string) => void;
+  setOpen: (open: boolean) => void;
 };
 
 const schema = Yup.object().shape({
@@ -26,12 +30,33 @@ const schema = Yup.object().shape({
   password: validatePassword,
 });
 
-const Login: FC<Props> = ({ setRoute }) => {
+const Login: FC<Props> = ({ setRoute, setOpen }) => {
   const [show, setShow] = useState(false);
+
   const initialValues: ILogin = {
     email: '',
     password: '',
   };
+
+  const [login, { isLoading, error, isSuccess, data }] = useLoginMutation();
+
+  const handleSubmit = async (loginForm: ILogin) => {
+    const { email, password } = loginForm;
+    await login({ email, password });
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success('Login Successfully!');
+      setOpen(false);
+    }
+    if (error) {
+      if ('data' in error) {
+        const errorData = error as any;
+        toast.error(errorData?.data?.message);
+      }
+    }
+  }, [isSuccess, error, setOpen]);
 
   return (
     <div className='w-full'>
@@ -39,7 +64,7 @@ const Login: FC<Props> = ({ setRoute }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={schema}
-        onSubmit={({ email, password }) => console.log(email, password)}
+        onSubmit={handleSubmit}
       >
         {({ errors, touched }) => (
           <Form>

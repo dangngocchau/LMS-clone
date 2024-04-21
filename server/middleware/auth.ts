@@ -14,7 +14,8 @@ import sendToken, {
 export const isAuthenticated = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const accessToken = req?.cookies?.access_token as string;
+      const accessToken = req.cookies.access_token as string;
+
       /** Check user login or not */
       if (!accessToken) {
         return next(

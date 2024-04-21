@@ -1,10 +1,14 @@
 import { apiSlice } from '@/redux/features/api/apiSlice';
-import { userRegistration } from '@/redux/features/auth/authSlice';
+import {
+  userLoggedIn,
+  userRegistration,
+} from '@/redux/features/auth/authSlice';
 import {
   IActivation,
   RegistrationData,
   RegistrationResponse,
 } from '@/redux/features/auth/authInterface';
+import { ILogin } from '@/app/components/Auth/IAuth.interface';
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -38,7 +42,29 @@ export const authApi = apiSlice.injectEndpoints({
         },
       }),
     }),
+    login: builder.mutation({
+      query: (loginData: ILogin) => ({
+        url: 'login',
+        method: 'POST',
+        body: loginData,
+        credentials: 'include' as const,
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(
+            userLoggedIn({
+              accessToken: result.data.data.accessToken,
+              user: result.data.data.user,
+            })
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useRegisterMutation, useActivationMutation } = authApi;
+export const { useRegisterMutation, useActivationMutation, useLoginMutation } =
+  authApi;

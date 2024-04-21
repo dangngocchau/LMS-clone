@@ -21,6 +21,7 @@ const SubmitButton: FC<Props> = ({ label, className, isLoading, onClick }) => {
         disabled={isLoading}
         onClick={onClick}
         title={label}
+        type='submit'
       >
         {isLoading ? <CircularProgress size={24} color='inherit' /> : label}
       </button>

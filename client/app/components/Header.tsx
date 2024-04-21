@@ -10,6 +10,7 @@ import CustomModal from '@/app/utils/CustomModal';
 import Login from '@/app/components/Auth/Login';
 import SignUp from '@/app/components/Auth/SignUp';
 import Verification from '@/app/components/Auth/Verification';
+import { useAppSelector } from '@/app/hooks/reduxHook';
 
 type Props = {
   open: boolean;
@@ -22,6 +23,8 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+
+  const { user } = useAppSelector((state) => state.auth);
 
   if (typeof window !== 'undefined') {
     window.addEventListener('scroll', () => {
@@ -38,6 +41,8 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
       setOpenSidebar(false);
     }
   };
+
+  console.log(user);
 
   return (
     <div className='w-full relative'>
