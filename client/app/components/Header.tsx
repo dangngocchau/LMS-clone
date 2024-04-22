@@ -1,16 +1,20 @@
 'use client';
 import NavItems from '@/app/utils/NavItems';
 import Link from 'next/link';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import ThemeSwitcher from '@/app/utils/ThemeSwitcher';
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from 'react-icons/hi';
-import { BiBookOpen } from 'react-icons/bi';
 import Image from 'next/image';
 import CustomModal from '@/app/utils/CustomModal';
 import Login from '@/app/components/Auth/Login';
 import SignUp from '@/app/components/Auth/SignUp';
 import Verification from '@/app/components/Auth/Verification';
 import { useAppSelector } from '@/app/hooks/reduxHook';
+import { RxAvatar } from 'react-icons/rx';
+import avatar from '@/public/assets/avatar.png';
+import { useSession } from 'next-auth/react';
+import { useSocialAuthMutation } from '@/redux/features/auth/authApi';
+import toast from 'react-hot-toast';
 
 type Props = {
   open: boolean;
@@ -25,6 +29,8 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
 
   const { user } = useAppSelector((state) => state.auth);
+  // const { data } = useSession();
+  // const [socialAuth, { isSuccess, error, isLoading }] = useSocialAuthMutation();
 
   if (typeof window !== 'undefined') {
     window.addEventListener('scroll', () => {
@@ -42,7 +48,22 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
     }
   };
 
-  console.log(user);
+  // useEffect(() => {
+  //   if (!user) {
+  //     if (data) {
+  //       socialAuth({
+  //         email: data?.user?.email,
+  //         name: data?.user?.name,
+  //         avatar: data?.user?.image,
+  //       });
+  //     }
+  //   }
+  //   if (isSuccess) {
+  //     toast.success('Login Succesfully !');
+  //   }
+  // }, [data, user, socialAuth, isSuccess]);
+
+  // console.log('data', data);
 
   return (
     <div className='w-full relative'>
@@ -79,11 +100,21 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
-              <HiOutlineUserCircle
-                size={25}
-                className='hidden 800px:block cursor-pointer dark:text-white text-black'
-                onClick={() => setOpen(true)}
-              />
+              {user ? (
+                <Link href={'/profile'}>
+                  <Image
+                    src={user.avatar ? user.avatar : avatar}
+                    alt=''
+                    className='w-[30px] h-[30px] rounded-full'
+                  />
+                </Link>
+              ) : (
+                <HiOutlineUserCircle
+                  size={25}
+                  className='hidden 800px:block cursor-pointer dark:text-white text-black'
+                  onClick={() => setOpen(true)}
+                />
+              )}
             </div>
           </div>
         </div>

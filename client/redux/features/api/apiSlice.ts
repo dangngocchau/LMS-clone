@@ -1,4 +1,4 @@
-import { userLoggedIn } from '@/redux/features/auth/authSlice';
+import { userLoad, userLoggedIn } from '@/redux/features/auth/authSlice';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const apiSlice = createApi({
@@ -23,12 +23,10 @@ export const apiSlice = createApi({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          console.log('result', result);
 
           dispatch(
-            userLoggedIn({
-              accessToken: result.data.data.accessToken,
-              user: result.data.data.user,
+            userLoad({
+              user: result.data.data,
             })
           );
         } catch (error) {

@@ -8,7 +8,11 @@ import {
   RegistrationData,
   RegistrationResponse,
 } from '@/redux/features/auth/authInterface';
-import { ILogin } from '@/app/components/Auth/IAuth.interface';
+import {
+  ILogin,
+  IRegister,
+  ISocialAuth,
+} from '@/app/components/Auth/IAuth.interface';
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -63,8 +67,33 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    socialAuth: builder.mutation({
+      query: (authData: ISocialAuth) => ({
+        url: 'social-auth',
+        method: 'POST',
+        body: authData,
+        credentials: 'include' as const,
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(
+            userLoggedIn({
+              accessToken: result.data.data.accessToken,
+              user: result.data.data.user,
+            })
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useRegisterMutation, useActivationMutation, useLoginMutation } =
-  authApi;
+export const {
+  useRegisterMutation,
+  useActivationMutation,
+  useLoginMutation,
+  useSocialAuthMutation,
+} = authApi;

@@ -40,6 +40,7 @@ export const getUserBySocialAuthLogin = async (
     const user = await UserModel.findOne({ email });
 
     if (!user) {
+      console.log('vao day khong 2');
       const newUser = await UserModel.create({
         email,
         name,
@@ -48,6 +49,16 @@ export const getUserBySocialAuthLogin = async (
       /** User not authenticated -> Create new user */
       sendToken(newUser, StatusCode.OK, res);
     } else {
+      // console.log('vao day khong 1');
+      // if (!user.avatar) {
+      //   console.log('vao day khong');
+      //   const avatarInfo = {
+      //     public_id: 'socialId',
+      //     url: avatar,
+      //   };
+      //   user.avatar = avatarInfo;
+      //   await user.save();
+      // }
       /** User authenticated -> Next middleware with this user */
       sendToken(user, StatusCode.OK, res);
     }
