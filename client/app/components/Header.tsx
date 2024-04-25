@@ -49,19 +49,21 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
   };
 
   // useEffect(() => {
-  //   if (!user) {
-  //     if (data) {
-  //       socialAuth({
-  //         email: data?.user?.email,
-  //         name: data?.user?.name,
-  //         avatar: data?.user?.image,
-  //       });
-  //     }
-  //   }
-  //   if (isSuccess) {
-  //     toast.success('Login Succesfully !');
-  //   }
-  // }, [data, user, socialAuth, isSuccess]);
+  //   // if (!user) {
+  //   //   if (data) {
+  //   //     socialAuth({
+  //   //       email: data?.user?.email,
+  //   //       name: data?.user?.name,
+  //   //       avatar: data?.user?.image,
+  //   //     });
+  //   //   }
+  //   // }
+  //   // if (isSuccess) {
+  //   //   toast.success('Login Succesfully !');
+  //   // }
+  //   // if(data === null) {
+  //   // }
+  // }, [data]);
 
   // console.log('data', data);
 

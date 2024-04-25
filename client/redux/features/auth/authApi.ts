@@ -1,6 +1,7 @@
 import { apiSlice } from '@/redux/features/api/apiSlice';
 import {
   userLoggedIn,
+  userLoggedOut,
   userRegistration,
 } from '@/redux/features/auth/authSlice';
 import {
@@ -32,7 +33,7 @@ export const authApi = apiSlice.injectEndpoints({
             })
           );
         } catch (error) {
-          console.log(error);
+          console.log('Registration error', error);
         }
       },
     }),
@@ -63,7 +64,7 @@ export const authApi = apiSlice.injectEndpoints({
             })
           );
         } catch (error) {
-          console.log(error);
+          console.log('Login error', error);
         }
       },
     }),
@@ -84,7 +85,21 @@ export const authApi = apiSlice.injectEndpoints({
             })
           );
         } catch (error) {
-          console.log(error);
+          console.log('Social Auth', error);
+        }
+      },
+    }),
+    logOut: builder.query({
+      query: () => ({
+        url: 'logout',
+        method: 'GET',
+        credentials: 'include' as const,
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          dispatch(userLoggedOut());
+        } catch (error) {
+          console.log('Logout error:', error);
         }
       },
     }),
@@ -96,4 +111,5 @@ export const {
   useActivationMutation,
   useLoginMutation,
   useSocialAuthMutation,
+  useLogOutQuery,
 } = authApi;
