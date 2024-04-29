@@ -1,4 +1,8 @@
 'use client';
+import {
+  ISideBarProfileConst,
+  SideBarProfileConst,
+} from '@/app/components/Profile/profile.constant';
 import SideBarProfile from '@/app/components/Profile/SideBarProfile';
 import { useAppSelector } from '@/app/hooks/reduxHook';
 import { useLogOutQuery } from '@/redux/features/auth/authApi';
@@ -13,13 +17,16 @@ type Props = {
 const Profile: FC<Props> = ({ user }) => {
   const [scroll, setScroll] = useState(false);
   const [avatar, setAvatar] = useState(null);
-  const [active, setActive] = useState(1);
-  const [logout, setLogout] = useState(false);
-  // const { token } = useAppSelector((state) => state.auth);
-  const { refetch, isLoading } = useLogOutQuery(undefined);
+  const [active, setActive] = useState<ISideBarProfileConst>(
+    SideBarProfileConst[0]
+  );
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { refetch, isLoading } = useLogOutQuery(undefined, {
+    skip: !isInitialized,
+  });
 
   const logOutHandler = () => {
-    refetch();
+    setIsInitialized(true);
   };
 
   if (typeof window !== undefined) {
@@ -42,11 +49,11 @@ const Profile: FC<Props> = ({ user }) => {
         <SideBarProfile
           user={user}
           active={active}
-          avatar={avatar}
           setActive={setActive}
           logOutHandler={logOutHandler}
         />
       </div>
+      {active.component && <active.component />}
     </div>
   );
 };

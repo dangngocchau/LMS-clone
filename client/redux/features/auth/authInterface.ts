@@ -7,6 +7,7 @@ export interface User {
 export interface AuthState {
   token: string;
   user: any;
+  isUserLogin: boolean | null;
 }
 
 export interface RegisterPayload {

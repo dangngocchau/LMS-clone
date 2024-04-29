@@ -1,4 +1,5 @@
-import userAuth from '@/app/hooks/userAuth';
+'use client';
+import useAuth from '@/app/hooks/userAuth';
 import { redirect } from 'next/navigation';
 
 interface ProtectedProps {
@@ -6,7 +7,11 @@ interface ProtectedProps {
 }
 
 export default function Protected({ children }: ProtectedProps) {
-  const isAuthenticated = userAuth();
+  const isAuthenticated = useAuth();
+  // Check token exist on browser
+  if (isAuthenticated !== null) {
+    return isAuthenticated ? children : redirect('/');
+  }
 
-  return isAuthenticated ? children : redirect('/');
+  return '';
 }

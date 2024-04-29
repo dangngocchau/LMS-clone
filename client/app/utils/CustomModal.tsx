@@ -1,5 +1,5 @@
 import { Box, Modal } from '@mui/material';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
 type Props = {

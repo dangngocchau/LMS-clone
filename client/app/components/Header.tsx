@@ -15,6 +15,7 @@ import avatar from '@/public/assets/avatar.png';
 import { useSession } from 'next-auth/react';
 import { useSocialAuthMutation } from '@/redux/features/auth/authApi';
 import toast from 'react-hot-toast';
+import useAuth from '@/app/hooks/userAuth';
 
 type Props = {
   open: boolean;
@@ -29,6 +30,8 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
   const [openSidebar, setOpenSidebar] = useState(false);
 
   const { user } = useAppSelector((state) => state.auth);
+  const isUserLogin = useAuth();
+
   // const { data } = useSession();
   // const [socialAuth, { isSuccess, error, isLoading }] = useSocialAuthMutation();
 
@@ -49,23 +52,21 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
   };
 
   // useEffect(() => {
-  //   // if (!user) {
-  //   //   if (data) {
-  //   //     socialAuth({
-  //   //       email: data?.user?.email,
-  //   //       name: data?.user?.name,
-  //   //       avatar: data?.user?.image,
-  //   //     });
-  //   //   }
-  //   // }
-  //   // if (isSuccess) {
-  //   //   toast.success('Login Succesfully !');
-  //   // }
-  //   // if(data === null) {
-  //   // }
+  // if (!user) {
+  //   if (data) {
+  //     socialAuth({
+  //       email: data?.user?.email,
+  //       name: data?.user?.name,
+  //       avatar: data?.user?.image,
+  //     });
+  //   }
+  // }
+  // if (isSuccess) {
+  //   toast.success('Login Succesfully !');
+  // }
+  // if(data === null) {
+  // }
   // }, [data]);
-
-  // console.log('data', data);
 
   return (
     <div className='w-full relative'>
@@ -102,7 +103,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
-              {user ? (
+              {isUserLogin ? (
                 <Link href={'/profile'}>
                   <Image
                     src={user.avatar ? user.avatar : avatar}
