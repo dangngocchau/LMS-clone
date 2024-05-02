@@ -16,6 +16,8 @@ import { useSession } from 'next-auth/react';
 import { useSocialAuthMutation } from '@/redux/features/auth/authApi';
 import toast from 'react-hot-toast';
 import useAuth from '@/app/hooks/userAuth';
+import { usePathname } from 'next/navigation';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
   open: boolean;
@@ -29,11 +31,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
 
+  const pathName = usePathname();
+
   const { user } = useAppSelector((state) => state.auth);
   const isUserLogin = useAuth();
-
-  // const { data } = useSession();
-  // const [socialAuth, { isSuccess, error, isLoading }] = useSocialAuthMutation();
 
   if (typeof window !== 'undefined') {
     window.addEventListener('scroll', () => {
@@ -50,23 +51,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
       setOpenSidebar(false);
     }
   };
-
-  // useEffect(() => {
-  // if (!user) {
-  //   if (data) {
-  //     socialAuth({
-  //       email: data?.user?.email,
-  //       name: data?.user?.name,
-  //       avatar: data?.user?.image,
-  //     });
-  //   }
-  // }
-  // if (isSuccess) {
-  //   toast.success('Login Succesfully !');
-  // }
-  // if(data === null) {
-  // }
-  // }, [data]);
 
   return (
     <div className='w-full relative'>
@@ -93,7 +77,11 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
               </Link>
             </div>
             <div className='flex items-center'>
-              <NavItems activeItem={activeItem} isMobile={false} />
+              <NavItems
+                activeItem={activeItem}
+                pathName={String(pathName)}
+                isMobile={false}
+              />
               <ThemeSwitcher />
               {/* Only For Mobile */}
               <div className='800px:hidden'>
@@ -106,9 +94,15 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
               {isUserLogin ? (
                 <Link href={'/profile'}>
                   <Image
-                    src={user.avatar ? user.avatar : avatar}
+                    src={user?.avatar?.url ? user?.avatar?.url : avatar}
                     alt=''
-                    className='w-[30px] h-[30px] rounded-full'
+                    width={30}
+                    height={30}
+                    className={twMerge(
+                      'w-[30px] h-[30px] rounded-full',
+                      String(pathName) === '/profile' &&
+                        'border-[2px] border-solid border-[#37a39a]'
+                    )}
                   />
                 </Link>
               ) : (
@@ -129,7 +123,11 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
             id='screen'
           >
             <div className='w-[70%] fixed z-[9999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0'>
-              <NavItems activeItem={activeItem} isMobile={true} />
+              <NavItems
+                activeItem={activeItem}
+                pathName={String(pathName)}
+                isMobile={true}
+              />
               <HiOutlineUserCircle
                 size={25}
                 className='cursor-pointer ml-5 my-2 text-black dark:text-white'
@@ -151,7 +149,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
               open={open}
               setOpen={setOpen}
               setRoute={setRoute}
-              activeItem={activeItem}
               component={Login}
             />
           )}
@@ -164,7 +161,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
               open={open}
               setOpen={setOpen}
               setRoute={setRoute}
-              activeItem={activeItem}
               component={SignUp}
             />
           )}
@@ -177,7 +173,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
               open={open}
               setOpen={setOpen}
               setRoute={setRoute}
-              activeItem={activeItem}
               component={Verification}
             />
           )}

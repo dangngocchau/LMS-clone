@@ -78,7 +78,7 @@ const Login: FC<Props> = ({ setRoute, setOpen }) => {
               errors={errors}
               touched={touched}
             />
-            <SubmitButton label='Login' />
+            <SubmitButton label='Login' isLoading={isLoading} />
             <AuthFooter
               message='Not have any account?'
               label='Sign Up'

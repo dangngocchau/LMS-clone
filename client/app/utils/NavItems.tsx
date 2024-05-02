@@ -27,9 +27,10 @@ export const navItemsData = [
 type Props = {
   activeItem: number;
   isMobile: boolean;
+  pathName: string;
 };
 
-const NavItems: FC<Props> = ({ activeItem, isMobile }) => {
+const NavItems: FC<Props> = ({ activeItem, isMobile, pathName }) => {
   return (
     <>
       <div className='hidden 800px:flex'>
@@ -38,7 +39,7 @@ const NavItems: FC<Props> = ({ activeItem, isMobile }) => {
             <Link href={item.url} key={index} passHref>
               <span
                 className={`${
-                  activeItem === index
+                  pathName === item.url
                     ? 'dark:text-[#37a39a] text-[crimson]'
                     : 'dark:text-white text-black'
                 } text-[18px] px-6 font-Poppins font-[400] hover:text-[crimson] dark:hover:text-[#37a39a]`}
@@ -63,7 +64,7 @@ const NavItems: FC<Props> = ({ activeItem, isMobile }) => {
                 <Link href={item.url} passHref>
                   <span
                     className={`${
-                      activeItem === index
+                      pathName === item.url
                         ? 'dark:text-[#37a39a] text-[crimson] '
                         : 'dark:text-white text-black '
                     } block py-5 text-[20px] px-6 font-Poppins font-[600]`}

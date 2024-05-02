@@ -38,15 +38,15 @@ const SideBarProfile: FC<Props> = ({
           >
             {item.id === 1 && (
               <Image
-                src={user.avatar ? user.avatar : avatarDefault}
+                src={user.avatar ? user.avatar.url : avatarDefault}
                 alt=''
+                width={30}
+                height={30}
                 className='w-[30px] h-[30px] 800px:w-[30px] 800px:h-[30px] cursor-pointer rounded-full'
               />
             )}
             {item.icon && <item.icon size={20} fill='#fff' />}
-            <h5 className='pl-2 800px:block hidden font-Poppins dark:text-white text-black'>
-              {item.name}
-            </h5>
+            {item.name}
           </div>
         );
       })}

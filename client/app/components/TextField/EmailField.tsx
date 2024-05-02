@@ -4,11 +4,12 @@ import { ILogin } from '@/app/components/Auth/IAuth.interface';
 import clsx from 'clsx';
 import ErrorMessage from '@/app/components/Typography/ErrorMessage';
 import FieldLabel from '@/app/components/Typography/FieldLabel';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
   errors: FormikErrors<ILogin>;
   touched: FormikTouched<ILogin>;
-  className: string;
+  className?: string;
 };
 
 const EmailField: FC<Props> = ({ errors, touched, className }) => {
@@ -22,9 +23,11 @@ const EmailField: FC<Props> = ({ errors, touched, className }) => {
         name='email'
         id='email'
         placeholder='example@gmail.com'
-        className={clsx(className, {
-          'border-red-500': isError,
-        })}
+        className={twMerge(
+          'w-full text-black dark:text-white bg-transparent border h-[40px] px-2 outline-none mt-[10px] font-Poppins',
+          isError && 'border-red-500',
+          className
+        )}
       />
       {errors.email && touched.email && <ErrorMessage message={errors.email} />}
     </div>

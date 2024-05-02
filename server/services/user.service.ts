@@ -74,20 +74,20 @@ export const updateUserInfoById = async (
   next: NextFunction
 ) => {
   try {
-    const { name, email } = req.body as IUpdateUserInfo;
+    const { name } = req.body as IUpdateUserInfo;
     const userId = req.user?._id;
     const user = await UserModel.findById(userId);
 
-    if (email && user) {
-      const isEmailExist = await UserModel.findOne({ email });
-      /** Check email exist or not */
-      if (isEmailExist) {
-        return next(
-          new ErrorHandler(ErrorMessage.EMAIL_EXIST, StatusCode.BAD_REQUEST)
-        );
-      }
-      user.email = email;
-    }
+    // if (email && user) {
+    //   const isEmailExist = await UserModel.findOne({ email });
+    //   /** Check email exist or not */
+    //   if (isEmailExist) {
+    //     return next(
+    //       new ErrorHandler(ErrorMessage.EMAIL_EXIST, StatusCode.BAD_REQUEST)
+    //     );
+    //   }
+    //   user.email = email;
+    // }
     /** Check email exist or not */
     if (name && user) {
       user.name = name;

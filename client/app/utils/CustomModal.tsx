@@ -5,7 +5,6 @@ import { toast } from 'react-hot-toast';
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  activeItem: number;
   component: React.ElementType;
   setRoute: (route: string) => void;
 };

@@ -1,36 +1,37 @@
 import { RiLockPasswordLine } from 'react-icons/ri';
 import { SiCoursera } from 'react-icons/si';
 import { AiOutlineLogout } from 'react-icons/ai';
-import React, { ComponentType, FC } from 'react';
+import React, { ComponentType, FC, FunctionComponent, ReactNode } from 'react';
 import ProfileInfo from '@/app/components/Profile/ProfileInfo';
 import TextTitle from '@/app/components/Typography/TextTitle';
+import NormalText from '@/app/components/Typography/NormalText';
 
 export interface ISideBarProfileConst {
   name: JSX.Element;
   icon: React.ElementType | null;
   id: number;
-  component?: ComponentType | null;
+  component?: FunctionComponent | null;
 }
 
 export const SideBarProfileConst: ISideBarProfileConst[] = [
   {
-    name: <TextTitle title='My Account' />,
+    name: <NormalText title='My Account' />,
     icon: null,
     id: 1,
     component: ProfileInfo,
   },
   {
-    name: <TextTitle title='Change Password' />,
+    name: <NormalText title='Change Password' />,
     icon: RiLockPasswordLine,
     id: 2,
   },
   {
-    name: <TextTitle title='Enroll Courses' />,
+    name: <NormalText title='Enroll Courses' />,
     icon: SiCoursera,
     id: 3,
   },
   {
-    name: <TextTitle title='Logout' />,
+    name: <NormalText title='Logout' />,
     icon: AiOutlineLogout,
     id: 4,
   },
