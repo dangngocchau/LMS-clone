@@ -10,6 +10,7 @@ export const userApi = apiSlice.injectEndpoints({
         body: { avatar },
         credentials: 'include' as const,
       }),
+      invalidatesTags: (result, error) => (error ? [] : ['EDIT']),
     }),
     editProfile: builder.mutation<IProfileEdit, Partial<IProfileEdit>>({
       query: ({ name }) => ({
@@ -18,6 +19,7 @@ export const userApi = apiSlice.injectEndpoints({
         body: { name },
         credentials: 'include' as const,
       }),
+      invalidatesTags: (result, error) => (error ? [] : ['EDIT']),
     }),
   }),
 });

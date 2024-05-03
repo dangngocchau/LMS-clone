@@ -10,7 +10,7 @@ export interface ISideBarProfileConst {
   name: JSX.Element;
   icon: React.ElementType | null;
   id: number;
-  component?: FunctionComponent | null;
+  component?: FC<any> | null;
 }
 
 export const SideBarProfileConst: ISideBarProfileConst[] = [

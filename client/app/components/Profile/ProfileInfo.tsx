@@ -29,14 +29,19 @@ const schema = Yup.object().shape({
 });
 
 const ProfileInfo: FC<Props> = () => {
-  const { user } = useAppSelector((state) => state.auth);
   const [updateAvatar, { isLoading, error, isSuccess }] =
     useUpdateAvatarMutation();
-  const { refetch } = useLoadUserQuery(undefined);
+  const {} = useLoadUserQuery(undefined);
   const [
     editProfile,
-    { isLoading: isEditProfileLoading, error: editProfileError },
+    {
+      isLoading: isEditProfileLoading,
+      error: editProfileError,
+      isSuccess: isEditSuccess,
+    },
   ] = useEditProfileMutation();
+
+  const { user } = useAppSelector((state) => state.auth);
 
   const initialValues: IProfileUpdateForm = {
     name: user?.name,
@@ -69,14 +74,15 @@ const ProfileInfo: FC<Props> = () => {
   };
 
   useEffect(() => {
-    if (isSuccess || isEditProfileLoading) {
-      refetch();
+    if (isEditSuccess || isSuccess) {
       toast.success('Update Successfully');
     }
     if (error || editProfileError) {
       console.log('Error when update avatar');
     }
-  }, [isSuccess, refetch, error, isEditProfileLoading, editProfileError]);
+  }, [isSuccess, error, editProfileError, isEditSuccess]);
+
+  console.log('user', user, initialValues);
 
   return (
     <>
@@ -108,6 +114,7 @@ const ProfileInfo: FC<Props> = () => {
             initialValues={initialValues}
             validationSchema={schema}
             onSubmit={handleSubmit}
+            enableReinitialize={true}
           >
             {({ errors, touched }) => (
               <Form className='w-[50%]'>
