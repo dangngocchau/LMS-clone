@@ -1,24 +1,19 @@
 'use client';
-import NavItems from '@/app/utils/NavItems';
-import Link from 'next/link';
-import React, { FC, useEffect, useState } from 'react';
-import ThemeSwitcher from '@/app/utils/ThemeSwitcher';
-import { HiOutlineMenuAlt3, HiOutlineUserCircle } from 'react-icons/hi';
-import Image from 'next/image';
-import CustomModal from '@/app/utils/CustomModal';
 import Login from '@/app/components/Auth/Login';
 import SignUp from '@/app/components/Auth/SignUp';
 import Verification from '@/app/components/Auth/Verification';
 import { useAppSelector } from '@/app/hooks/reduxHook';
-import { RxAvatar } from 'react-icons/rx';
-import avatar from '@/public/assets/avatar.png';
-import { useSession } from 'next-auth/react';
-import { useSocialAuthMutation } from '@/redux/features/auth/authApi';
-import toast from 'react-hot-toast';
 import useAuth from '@/app/hooks/userAuth';
+import CustomModal from '@/app/utils/CustomModal';
+import NavItems from '@/app/utils/NavItems';
+import ThemeSwitcher from '@/app/utils/ThemeSwitcher';
+import avatar from '@/public/assets/avatar.png';
+import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { FC, useState } from 'react';
+import { HiOutlineMenuAlt3, HiOutlineUserCircle } from 'react-icons/hi';
 import { twMerge } from 'tailwind-merge';
-import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
 
 type Props = {
   open: boolean;
@@ -31,8 +26,6 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
-
-  const { isFetching } = useLoadUserQuery(undefined);
 
   const pathName = usePathname();
 

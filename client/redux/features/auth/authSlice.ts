@@ -6,7 +6,6 @@ import {
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState: AuthState = {
-  token: '',
   user: '',
   isUserLogin: null,
 };
@@ -25,7 +24,6 @@ const authSlice = createSlice({
     },
     userLoggedOut: (state) => {
       localStorage.removeItem('token');
-      state.token = '';
       state.user = '';
       state.isUserLogin = false;
     },
@@ -34,6 +32,9 @@ const authSlice = createSlice({
     },
     isUserLogin: (state, action: PayloadAction<{ token: string }>) => {
       state.isUserLogin = !!action.payload.token;
+    },
+    updateUser: (state, action: PayloadAction<any>) => {
+      state.user = action.payload;
     },
   },
 });
@@ -44,6 +45,7 @@ export const {
   userLoggedOut,
   userLoad,
   isUserLogin,
+  updateUser,
 } = authSlice.actions;
 
 export default authSlice.reducer;

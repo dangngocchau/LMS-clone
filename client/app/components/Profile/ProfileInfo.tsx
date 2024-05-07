@@ -31,7 +31,11 @@ const schema = Yup.object().shape({
 const ProfileInfo: FC<Props> = () => {
   const [updateAvatar, { isLoading, error, isSuccess }] =
     useUpdateAvatarMutation();
-  const {} = useLoadUserQuery(undefined);
+  const { user } = useAppSelector((state) => state.auth);
+  const { data, isFetching } = useLoadUserQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
   const [
     editProfile,
     {
@@ -40,8 +44,6 @@ const ProfileInfo: FC<Props> = () => {
       isSuccess: isEditSuccess,
     },
   ] = useEditProfileMutation();
-
-  const { user } = useAppSelector((state) => state.auth);
 
   const initialValues: IProfileUpdateForm = {
     name: user?.name,
@@ -123,8 +125,8 @@ const ProfileInfo: FC<Props> = () => {
                   label='Name'
                   placeHolder='Enter Your Name'
                 />
-                <EmailField errors={errors} touched={touched} />
-                <SubmitButton label='Update' isLoading={isLoading} />
+                <EmailField errors={errors} touched={touched} disabled={true} />
+                <SubmitButton label='Update' isLoading={isEditProfileLoading} />
               </Form>
             )}
           </Formik>

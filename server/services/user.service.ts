@@ -17,12 +17,13 @@ import cloudinary from 'cloudinary';
 /** Get user by ID */
 export const getUserById = async (id: string, next: NextFunction) => {
   try {
-    let user = await redis.get(id);
-    if (user) {
-      return JSON.parse(user);
-    } else {
-      user = await UserModel.findById(id);
-    }
+    // let user = await redis.get(id);
+    let user;
+    // if (user) {
+    //   return JSON.parse(user);
+    // } else {
+    user = await UserModel.findById(id);
+    // }
     return user;
   } catch (error: any) {
     next(error);

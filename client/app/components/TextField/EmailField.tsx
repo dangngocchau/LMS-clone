@@ -10,9 +10,15 @@ type Props = {
   errors: FormikErrors<ILogin>;
   touched: FormikTouched<ILogin>;
   className?: string;
+  disabled?: boolean;
 };
 
-const EmailField: FC<Props> = ({ errors, touched, className }) => {
+const EmailField: FC<Props> = ({
+  errors,
+  touched,
+  className,
+  disabled = false,
+}) => {
   const isError = errors.email && touched.email;
 
   return (
@@ -22,6 +28,7 @@ const EmailField: FC<Props> = ({ errors, touched, className }) => {
         type='email'
         name='email'
         id='email'
+        disabled={disabled}
         placeholder='example@gmail.com'
         className={twMerge(
           'w-full text-black dark:text-white bg-transparent border h-[40px] px-2 outline-none mt-[10px] font-Poppins',
