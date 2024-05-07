@@ -82,8 +82,6 @@ const ProfileInfo: FC<Props> = () => {
     }
   }, [isSuccess, error, editProfileError, isEditSuccess]);
 
-  console.log('user', user, initialValues);
-
   return (
     <>
       <div className='w-full flex justify-center items-center flex-col'>
@@ -126,7 +124,7 @@ const ProfileInfo: FC<Props> = () => {
                   placeHolder='Enter Your Name'
                 />
                 <EmailField errors={errors} touched={touched} />
-                <SubmitButton label='Update' isLoading={false} />
+                <SubmitButton label='Update' isLoading={isLoading} />
               </Form>
             )}
           </Formik>

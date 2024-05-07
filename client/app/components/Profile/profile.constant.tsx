@@ -5,6 +5,7 @@ import React, { ComponentType, FC, FunctionComponent, ReactNode } from 'react';
 import ProfileInfo from '@/app/components/Profile/ProfileInfo';
 import TextTitle from '@/app/components/Typography/TextTitle';
 import NormalText from '@/app/components/Typography/NormalText';
+import ChangePassword from '@/app/components/Profile/ChangePassword';
 
 export interface ISideBarProfileConst {
   name: JSX.Element;
@@ -24,6 +25,7 @@ export const SideBarProfileConst: ISideBarProfileConst[] = [
     name: <NormalText title='Change Password' />,
     icon: RiLockPasswordLine,
     id: 2,
+    component: ChangePassword,
   },
   {
     name: <NormalText title='Enroll Courses' />,

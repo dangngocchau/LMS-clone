@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 import useAuth from '@/app/hooks/userAuth';
 import { usePathname } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
 
 type Props = {
   open: boolean;
@@ -30,6 +31,8 @@ type Props = {
 const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+
+  const { isFetching } = useLoadUserQuery(undefined);
 
   const pathName = usePathname();
 

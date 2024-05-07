@@ -5,7 +5,7 @@ export interface User {
 }
 
 export interface AuthState {
-  token: string;
+  token?: string;
   user: any;
   isUserLogin: boolean | null;
 }

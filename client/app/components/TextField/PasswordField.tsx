@@ -5,11 +5,12 @@ import clsx from 'clsx';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import ErrorMessage from '@/app/components/Typography/ErrorMessage';
 import FieldLabel from '@/app/components/Typography/FieldLabel';
+import { twMerge } from 'tailwind-merge';
 
 type Props = {
   errors: FormikErrors<ILogin>;
   touched: FormikTouched<ILogin>;
-  className: string;
+  className?: string;
 };
 
 const PasswordField: FC<Props> = ({ errors, touched, className }) => {
@@ -28,9 +29,14 @@ const PasswordField: FC<Props> = ({ errors, touched, className }) => {
           name='password'
           id='password'
           placeholder='passsword!@#'
-          className={clsx(className, {
-            'border-red-500': errors.password && touched.password,
-          })}
+          // className={clsx('w-full text-black dark:text-white bg-transparent border h-[40px] px-2 outline-none mt-[10px] font-Poppins', {
+          //   'border-red-500': errors.password && touched.password,
+          //   className
+          // })}
+          className={twMerge(
+            'w-full text-black dark:text-white bg-transparent border h-[40px] px-2 outline-none mt-[10px] font-Poppins',
+            errors.password || (touched.password && 'border-red-500', className)
+          )}
         />
         {!show ? (
           <AiOutlineEyeInvisible
