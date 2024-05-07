@@ -4,7 +4,6 @@ import {
   IChangePassword,
   IProfileEdit,
 } from '@/redux/features/user/userInterface';
-// import { updateUser } from '@/redux/features/user/userSlice';
 
 export const userApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
