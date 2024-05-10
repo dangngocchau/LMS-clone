@@ -1,11 +1,41 @@
-import { userLoad, userLoggedIn } from '@/redux/features/auth/authSlice';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  userLoad,
+  userLoggedIn,
+  userLoggedOut,
+} from '@/redux/features/auth/authSlice';
+import {
+  BaseQueryFn,
+  createApi,
+  FetchArgs,
+  fetchBaseQuery,
+  FetchBaseQueryError,
+} from '@reduxjs/toolkit/query/react';
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: process.env.NEXT_PUBLIC_SERVER_URI,
+  credentials: 'include',
+});
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401) {
+    const refreshResult = await baseQuery('/refresh', api, extraOptions);
+    if (refreshResult.data) {
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      api.dispatch(userLoggedOut());
+    }
+  }
+  return result;
+};
 
 export const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_SERVER_URI,
-  }),
+  baseQuery: baseQueryWithReauth,
   tagTypes: ['EDIT'],
   endpoints: (builder) => ({
     refreshToken: builder.query({
@@ -28,7 +58,7 @@ export const apiSlice = createApi({
 
           dispatch(
             userLoad({
-              user: result.data.data,
+              user: result?.data?.data,
             })
           );
         } catch (error) {

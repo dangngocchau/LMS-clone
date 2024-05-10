@@ -31,8 +31,7 @@ const schema = Yup.object().shape({
 const ProfileInfo: FC<Props> = () => {
   const [updateAvatar, { isLoading, error, isSuccess }] =
     useUpdateAvatarMutation();
-  const { user } = useAppSelector((state) => state.auth);
-  const { data, isFetching } = useLoadUserQuery(undefined, {
+  const { data: user } = useLoadUserQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -46,8 +45,8 @@ const ProfileInfo: FC<Props> = () => {
   ] = useEditProfileMutation();
 
   const initialValues: IProfileUpdateForm = {
-    name: user?.name,
-    email: user?.email,
+    name: user?.data.name,
+    email: user?.data.email,
   };
 
   const handleChangeImage = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +88,7 @@ const ProfileInfo: FC<Props> = () => {
       <div className='w-full flex justify-center items-center flex-col'>
         <div className='relative'>
           <Image
-            src={user?.avatar ? user?.avatar?.url : avatarDefault}
+            src={user?.data.avatar ? user?.data.avatar?.url : avatarDefault}
             alt=''
             width={120}
             height={120}
