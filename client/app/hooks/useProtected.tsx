@@ -8,10 +8,7 @@ interface ProtectedProps {
 
 export default function Protected({ children }: ProtectedProps) {
   const isAuthenticated = useAuth();
-  // Check token exist on browser
-  if (isAuthenticated !== null) {
+  if (isAuthenticated !== '') {
     return isAuthenticated ? children : redirect('/');
   }
-
-  return '';
 }

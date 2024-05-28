@@ -8,8 +8,6 @@ interface Props {}
 
 const Page: FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
-  const [activeItem, setActiveItem] = useState(0);
-
   const [route, setRoute] = useState('Login');
 
   return (
@@ -19,13 +17,7 @@ const Page: FC<Props> = (props) => {
         description='Elearing platform'
         keywords='Programing, React, Redux, Nodejs'
       />
-      <Header
-        open={open}
-        setOpen={setOpen}
-        activeItem={activeItem}
-        setRoute={setRoute}
-        route={route}
-      />
+      <Header open={open} setOpen={setOpen} setRoute={setRoute} route={route} />
       <Hero />
     </div>
   );

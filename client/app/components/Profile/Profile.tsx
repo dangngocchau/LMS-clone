@@ -16,7 +16,6 @@ type Props = {
 
 const Profile: FC<Props> = ({ user }) => {
   const [scroll, setScroll] = useState(false);
-  const [avatar, setAvatar] = useState(null);
   const [active, setActive] = useState<ISideBarProfileConst>(
     SideBarProfileConst[0]
   );

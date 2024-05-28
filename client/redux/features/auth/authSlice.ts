@@ -24,11 +24,12 @@ const authSlice = createSlice({
     },
     userLoggedOut: (state) => {
       localStorage.removeItem('token');
-      state.user = '';
+      state.user = null;
       state.isUserLogin = false;
     },
     userLoad: (state, action: PayloadAction<{ user: any }>) => {
       state.user = action.payload.user;
+      state.isUserLogin = true;
     },
     isUserLogin: (state, action: PayloadAction<{ token: string }>) => {
       state.isUserLogin = !!action.payload.token;

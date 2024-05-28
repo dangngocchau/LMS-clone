@@ -18,19 +18,16 @@ import { twMerge } from 'tailwind-merge';
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  activeItem: number;
   route: string;
   setRoute: (route: string) => void;
 };
 
-const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
+const Header: FC<Props> = ({ setOpen, route, setRoute, open }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
 
   const pathName = usePathname();
-
-  const { user } = useAppSelector((state) => state.auth);
-  const isUserLogin = useAuth();
+  const user = useAuth();
 
   if (typeof window !== 'undefined') {
     window.addEventListener('scroll', () => {
@@ -73,11 +70,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
               </Link>
             </div>
             <div className='flex items-center'>
-              <NavItems
-                activeItem={activeItem}
-                pathName={String(pathName)}
-                isMobile={false}
-              />
+              <NavItems pathName={String(pathName)} isMobile={false} />
               <ThemeSwitcher />
               {/* Only For Mobile */}
               <div className='800px:hidden'>
@@ -87,7 +80,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
                   onClick={() => setOpenSidebar(true)}
                 />
               </div>
-              {isUserLogin ? (
+              {user ? (
                 <Link href={'/profile'}>
                   <Image
                     src={user?.avatar?.url ? user?.avatar?.url : avatar}
@@ -119,11 +112,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, setRoute, open }) => {
             id='screen'
           >
             <div className='w-[70%] fixed z-[9999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0'>
-              <NavItems
-                activeItem={activeItem}
-                pathName={String(pathName)}
-                isMobile={true}
-              />
+              <NavItems pathName={String(pathName)} isMobile={true} />
               <HiOutlineUserCircle
                 size={25}
                 className='cursor-pointer ml-5 my-2 text-black dark:text-white'

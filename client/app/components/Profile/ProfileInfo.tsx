@@ -1,22 +1,20 @@
-import Image from 'next/image';
-import React, { ChangeEvent, FC, useEffect } from 'react';
-import avatarDefault from '@/public/assets/avatar.png';
-import { AiOutlineCamera } from 'react-icons/ai';
-import { Form, Formik } from 'formik';
-import InputField from '@/app/components/TextField/InputField';
-import EmailField from '@/app/components/TextField/EmailField';
-import { style } from '@/app/styles/style';
 import SubmitButton from '@/app/components/Button/SubmitButton';
+import { IProfileUpdateForm } from '@/app/components/Profile/profileInterface';
+import EmailField from '@/app/components/TextField/EmailField';
+import InputField from '@/app/components/TextField/InputField';
 import { validateEmail, validateName } from '@/app/utils/Validation';
-import * as Yup from 'yup';
-import { useAppSelector } from '@/app/hooks/reduxHook';
+import avatarDefault from '@/public/assets/avatar.png';
+import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
 import {
   useEditProfileMutation,
   useUpdateAvatarMutation,
 } from '@/redux/features/user/userApi';
-import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
-import { IProfileUpdateForm } from '@/app/components/Profile/profileInterface';
+import { Form, Formik } from 'formik';
+import Image from 'next/image';
+import { ChangeEvent, FC, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { AiOutlineCamera } from 'react-icons/ai';
+import * as Yup from 'yup';
 
 type Props = {
   avatar: string | null;
@@ -31,9 +29,7 @@ const schema = Yup.object().shape({
 const ProfileInfo: FC<Props> = () => {
   const [updateAvatar, { isLoading, error, isSuccess }] =
     useUpdateAvatarMutation();
-  const { data: user } = useLoadUserQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: user } = useLoadUserQuery(undefined);
 
   const [
     editProfile,
@@ -82,6 +78,8 @@ const ProfileInfo: FC<Props> = () => {
       console.log('Error when update avatar');
     }
   }, [isSuccess, error, editProfileError, isEditSuccess]);
+
+  console.log('Server Component');
 
   return (
     <>
@@ -133,32 +131,6 @@ const ProfileInfo: FC<Props> = () => {
       </div>
       <br />
       <br />
-      {/* <div className='w-full pl-6 800px:pl-10'>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={schema}
-          onSubmit={() => console.log(1)}
-        >
-          {({ errors, touched }) => (
-            <Form>
-              <InputField
-                className={style.input}
-                errors={errors}
-                touched={touched}
-                name='name'
-                label='Name'
-                placeHolder='Enter Your Name'
-              />
-              <EmailField
-                className={style.input}
-                errors={errors}
-                touched={touched}
-              />
-              <SubmitButton label='Update' isLoading={false} />
-            </Form>
-          )}
-        </Formik>
-      </div> */}
     </>
   );
 };

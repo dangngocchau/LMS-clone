@@ -25,12 +25,11 @@ export const navItemsData = [
 ];
 
 type Props = {
-  activeItem: number;
   isMobile: boolean;
   pathName: string;
 };
 
-const NavItems: FC<Props> = ({ activeItem, isMobile, pathName }) => {
+const NavItems: FC<Props> = ({ isMobile, pathName }) => {
   return (
     <>
       <div className='hidden 800px:flex'>
